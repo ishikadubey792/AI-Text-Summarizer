@@ -45,4 +45,4 @@ interface = gr.Interface(
     description="Summarize long text using Transformer-based AI model."
 )
 
-interface.launch()
+interface.launch(share=False)
