@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.env
+.ipynb_checkpoints
+
+# Large model files (exceeds GitHub 100MB limit)
+saved_summary_model/
+
+# Datasets (large CSV files)
+Datasets/
+
+hf_login.py
