@@ -20,7 +20,7 @@ An AI-powered text summarization web application built with **FastAPI** and **Hu
 ### App UI
 
 
-![App Screenshot](Screenshots/summarizor_ui_ss.png)
+![App Screenshot](Screenshots/Summarizor_ui_ss.png)
 ![Output Screenshot](Screenshots/summarizor_output_ss.png)
 
 
