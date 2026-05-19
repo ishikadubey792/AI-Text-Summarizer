@@ -33,7 +33,7 @@ def summarize_text(text):
 
     return summary
 
-# Gradio interface
+# Gradio UI
 interface = gr.Interface(
     fn=summarize_text,
     inputs=gr.Textbox(
@@ -45,4 +45,4 @@ interface = gr.Interface(
     description="Summarize long text using Transformer-based AI model."
 )
 
-interface.launch()
+interface.launch(server_name="0.0.0.0", server_port=7860)

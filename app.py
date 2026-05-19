@@ -7,13 +7,16 @@ import re
 from fastapi.templating import Jinja2Templates  #UI
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles #Images and CSS
+from fastapi import Form
 
 #Initialize our fastapi app
 app = FastAPI(title="Text summarizor app", description="Text summarization using T5", version="1.0")
 
 # load our model and tokenizer from hugging face
-model = T5ForConditionalGeneration.from_pretrained('./saved_summary_model')
-tokenizer = T5Tokenizer.from_pretrained('./saved_summary_model')
+model_name = "Ishikabharadwaj/text-summarizer-model"
+
+model = T5ForConditionalGeneration.from_pretrained(model_name)
+tokenizer = T5Tokenizer.from_pretrained(model_name)
 
 # device
 
@@ -74,10 +77,20 @@ def summarize_diaglogue(dialogue:str) -> str:
 
 
   # API Endpoints
-@app.post("/summarize")
-async def create_summary(dialogue_input:DialogueInput):
-    summary = summarize_diaglogue(dialogue_input.dialogue)
-    return {"summary" : summary}
+from fastapi import Form
+
+@app.post("/summarize", response_class=HTMLResponse)
+async def create_summary(request: Request, dialogue: str = Form(...)):
+
+    summary = summarize_diaglogue(dialogue)
+
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request,
+            "summary": summary
+        }
+    )
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request:Request):
