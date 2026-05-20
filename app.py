@@ -68,7 +68,6 @@ def summarize_diaglogue(dialogue:str) -> str:
   inputs = tokenizer(
       dialogue,
       max_length=512,
-      padding="max_length",
       truncation=True,
       return_tensors="pt"
   )
