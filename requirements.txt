@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 transformers==4.41.2
-torch==2.2.2
+torch
 sentencepiece
 safetensors
 jinja2
