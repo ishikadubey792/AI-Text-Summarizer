@@ -1,7 +1,7 @@
 fastapi  # backend API
 uvicorn # run FastAPI server
-transformers # loading our pretrained model
-torch # hugging face backend
+transformers==4.41.2# loading our pretrained model
+torch==2.2.2 # hugging face backend
 safetensors # memory optimization
 sentencepiece # model tokenizer
 jinja2 # UI template
