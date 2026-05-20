@@ -1,7 +1,8 @@
 # Fast-API
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
-from transformers import T5ForConditionalGeneration, T5Tokenizer
+# from transformers import T5ForConditionalGeneration, T5Tokenizer
+from transformers import T5ForConditionalGeneration, AutoTokenizer
 import torch
 import re
 from fastapi.templating import Jinja2Templates  #UI
@@ -16,7 +17,7 @@ app = FastAPI(title="Text summarizor app", description="Text summarization using
 model_name = "Ishikabharadwaj/text-summarizer-model"
 
 model = T5ForConditionalGeneration.from_pretrained(model_name)
-tokenizer = T5Tokenizer.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 # device
 
