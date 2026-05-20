@@ -8,6 +8,7 @@ import re
 from fastapi.templating import Jinja2Templates  #UI
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles #Images and CSS
+import gc
 from fastapi.middleware.cors import CORSMiddleware
 
 #Initialize our fastapi app
@@ -59,6 +60,7 @@ def clean_data(text):
   text = text.strip().lower()
   return text
 
+
 def summarize_diaglogue(dialogue:str) -> str:
   dialogue = clean_data(dialogue) # clean
 
@@ -71,18 +73,23 @@ def summarize_diaglogue(dialogue:str) -> str:
       return_tensors="pt"
   )
 
-  # generate the summary => token ids
-#   model.to(device)
-  summary_ids = model.generate(
-      inputs["input_ids"],
-      attention_mask = inputs["attention_mask"],
-      max_length=150,
-      num_beams=4,
-      early_stopping=True
-  )
+  # generate the summary => token ids with memory optimizations
+  with torch.no_grad():
+      summary_ids = model.generate(
+          inputs["input_ids"],
+          attention_mask = inputs["attention_mask"],
+          max_length=150,
+          num_beams=1,  # Reduced from 4 to 1 to prevent OOM crash on Render
+          early_stopping=True
+      )
 
   # token ids convert to summary => decoding ( decode our output)
   summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+
+  # force garbage collection to free RAM
+  del inputs
+  del summary_ids
+  gc.collect()
 
   return summary    
 
