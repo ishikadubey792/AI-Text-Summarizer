@@ -21,17 +21,18 @@ tokenizer = T5Tokenizer.from_pretrained(model_name)
 # device
 
 # Check whether GPU is available or not
-if torch.cuda.is_available():
-    device = torch.device("cuda")   # Use NVIDIA GPU
-    print("GPU is available!")
-    print("GPU Name:", torch.cuda.get_device_name(0))
-else:
-    device = torch.device("cpu")    # Fallback to CPU
-    print("GPU not available, using CPU")
+# if torch.cuda.is_available():
+#     device = torch.device("cuda")   # Use NVIDIA GPU
+#     print("GPU is available!")
+#     print("GPU Name:", torch.cuda.get_device_name(0))
+# else:
+#     device = torch.device("cpu")    # Fallback to CPU
+#     print("GPU not available, using CPU")
 
-# Move model to selected device (GPU or CPU)
-model.to(device)
+# # Move model to selected device (GPU or CPU)
+# model.to(device)
 
+device = torch.device("cpu")
 print("Using device:", device)
 
 # templating
@@ -61,7 +62,7 @@ def summarize_diaglogue(dialogue:str) -> str:
   )
 
   # generate the summary => token ids
-  model.to(device)
+#   model.to(device)
   summary_ids = model.generate(
       inputs["input_ids"],
       attention_mask = inputs["attention_mask"],
