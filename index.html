@@ -195,8 +195,14 @@
             submitButton.disabled = true;
 
             try {
+                // Determine backend URL (fallback to local FastAPI port 8000 if using Live Server or file://)
+                let backendUrl = "/summarize";
+                if (window.location.protocol === "file:" || (window.location.hostname === "127.0.0.1" && window.location.port !== "8000") || (window.location.hostname === "localhost" && window.location.port !== "8000")) {
+                    backendUrl = "http://127.0.0.1:8000/summarize";
+                }
+
                 // send dialogue to backend
-                const response = await fetch("/summarize",{
+                const response = await fetch(backendUrl,{
                     method:"POST",
                     headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({dialogue})

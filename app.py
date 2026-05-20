@@ -6,12 +6,21 @@ from transformers import T5ForConditionalGeneration, AutoTokenizer
 import torch
 import re
 from fastapi.templating import Jinja2Templates  #UI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles #Images and CSS
-from fastapi import Form
+from fastapi.middleware.cors import CORSMiddleware
 
 #Initialize our fastapi app
 app = FastAPI(title="Text summarizor app", description="Text summarization using T5", version="1.0")
+
+# Allow requests from any origin (needed for Render / Hugging Face deployments)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # load our model and tokenizer from hugging face
 model_name = "Ishikabharadwaj/text-summarizer-model"
@@ -79,20 +88,13 @@ def summarize_diaglogue(dialogue:str) -> str:
 
 
   # API Endpoints
-from fastapi import Form
 
-@app.post("/summarize", response_class=HTMLResponse)
-async def create_summary(request: Request, dialogue: str = Form(...)):
+@app.post("/summarize")
+async def create_summary(request: Request, body: DialogueInput):
 
-    summary = summarize_diaglogue(dialogue)
+    summary = summarize_diaglogue(body.dialogue)
 
-    return templates.TemplateResponse(
-        "index.html",
-        {
-            "request": request,
-            "summary": summary
-        }
-    )
+    return JSONResponse(content={"summary": summary})
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request:Request):
